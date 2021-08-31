@@ -1,5 +1,5 @@
 #include "JsArInterface.h"
-#include "DxlMaster.h"
+
 
 #define UART0 (0)
 
@@ -12,7 +12,7 @@ DynamixelStatus JsArInterface::set8(uint8_t addr, uint8_t val)
 	status = write(mId, addr, val);
 
 	if (status == DYN_STATUS_OK) {
-		regs[addr] = val;
+		mRegs[addr] = val;
 	}
 
 	return status;
@@ -21,11 +21,11 @@ DynamixelStatus JsArInterface::set8(uint8_t addr, uint8_t val)
 DynamixelStatus JsArInterface::set16(uint8_t addr, uint16_t val)
 {
 	uint8_t status;
-	status = write(mId, addr, val)
+	status = write(mId, addr, val);
 
 	if (status == DYN_STATUS_OK) {
-		regs[addr] = val;
-		regs[addr + 1] = val >> 8;
+		mRegs[addr] = val;
+		mRegs[addr + 1] = val >> 8;
 	}
 
 	return status;
@@ -35,10 +35,10 @@ DynamixelStatus JsArInterface::get8(uint8_t addr, uint8_t *data)
 {
 	if (data == nullptr) return DYN_STATUS_SOFT_ERROR;
 
-	uint8_t status = read(mId, addr, data)
+	uint8_t status = read(mId, addr, data);
 
 	if (status == DYN_STATUS_OK) {
-		regs[addr] = *data;
+		mRegs[addr] = *data;
 	}
 
 	return status;
@@ -48,41 +48,42 @@ DynamixelStatus JsArInterface::get16(uint8_t addr, uint16_t *data)
 {
 	if (data == nullptr) return DYN_STATUS_SOFT_ERROR;
 
-	uint8_t status = read(mId, addr, data)
+	uint8_t status = read(mId, addr, data);
 
 	if (status == DYN_STATUS_OK) {
-		regs[addr] = *data & 0xFF;
-		regs[addr + 1] = *data >> 8 & 0xFF;
+		mRegs[addr] = *data & 0xFF;
+		mRegs[addr + 1] = *data >> 8 & 0xFF;
 	}
 
 	return status;
 }
 
-void JsArInterface::set(uint8_t addr, uint8_t size, uint8_t *data)
+uint8_t JsArInterface::set(uint8_t addr, uint8_t size, uint8_t *data)
 {
 	if (data == nullptr) return DYN_STATUS_SOFT_ERROR;
 	
-	uint8_t status = write(id,  addr, size, data);
+	uint8_t status = write(mId,  addr, size, data);
 
 	if (status == DYN_STATUS_OK) {
-		memcpy(regs +  addr, data, size);
+		memcpy(mRegs +  addr, data, size);
 	}
 
 	return status;
 }
 
-void JsArInterface::get(uint8_t addr, uint8_t size, uint8_t* data)
+uint8_t JsArInterface::get(uint8_t addr, uint8_t size, uint8_t* data)
 {
 	if (data == nullptr) return DYN_STATUS_SOFT_ERROR;
 
-	uint8_t status = read(id, addr, size, data) 
+	uint8_t status = read(mId, addr, size, data);
 
 	if (status == DYN_STATUS_OK) {
-		memcpy(regs +  addr, data, size);
+		memcpy(mRegs +  addr, data, size);
 	}
 
 	return status;
 }
+
 
 /* Default setup 
 

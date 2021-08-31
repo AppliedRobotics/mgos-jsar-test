@@ -1,6 +1,6 @@
 #include "mgos.h"
-
 #include "mgos_dxlmaster.h"
+#include "mgos_jsar.h"
 
 #define UARTno    (0)
 #define LED_PIN   (2)
@@ -66,7 +66,10 @@ enum mgos_app_init_result mgos_app_init(void)
 {
   mgos_gpio_set_mode(LED_PIN, MGOS_GPIO_MODE_OUTPUT);
 
-  rgb = mgos_dxl_module_create(MODULE_ID, 57600);
+  if ( mgos_jsar_begin() == 0) LOG(LL_INFO, ("JSAR_INIT Complete"));
+
+
+  rgb = mgos_dxl_module_create(MODULE_ID);
   mgos_dxl_master_begin(57600);
   mgos_dxl_init(rgb);
 

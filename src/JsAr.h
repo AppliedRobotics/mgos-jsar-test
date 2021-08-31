@@ -1,17 +1,14 @@
 #ifndef __JS_AR_H
 #define __JS_AR_H
 
-#include  <stdint.h>
+#include "mgos_system.h"
 
 #define ESP_JS_AR (1)	
 
-class JsAr_t
+class JsAr
 {
-private:
-    uint8_t id;
-    void unlockBootloader();
 public:
-    JsAr_t(){};
+    JsAr(){};
 	int  begin(bool isEnableAllPins = true);
 
     void enableEthernet();
@@ -71,9 +68,16 @@ public:
 
     int updateFirmware();
     void lockExpander(uint8_t packet_n);
-    void unlockExpander();
+    uint8_t unlockExpander();
+
+private:
+
+    void delay(uint16_t sleep) { mgos_msleep(sleep); }
+    uint8_t id;
+    uint8_t unlockBootloader();
+
 };
 
-extern JsAr_t JsAr;
+extern JsAr jsar;
 
 #endif
