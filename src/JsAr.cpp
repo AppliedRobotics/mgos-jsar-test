@@ -98,14 +98,24 @@ static uint8_t* regs = jsi.mRegs;
 
 int JsAr::begin(bool isEnableAllPins)
 {
-/*
 	delay(100);
 	jsi.begin(1000000);
 	id = CONTROLLER_ID;
 
+ 	if (unlockBootloader() != DYN_STATUS_OK) {
+		 return 1;
+	}
+
+	uint16_t timeout = 500; 
 	do {
-		unlockBootloader();
-	} while (jsi.ping(BOOT_ID) != DYN_STATUS_OK);
+		delay(50);
+	} while (jsi.ping(BOOT_ID) != DYN_STATUS_OK && --timeout);
+
+	if (timeout == 0) { 
+		LOG(LL_INFO, ("BOOT_ID ping FASLE!")); 
+		return DYN_STATUS_TIMEOUT;
+	}
+
 	delay(100);
 
 	do {
@@ -113,10 +123,9 @@ int JsAr::begin(bool isEnableAllPins)
 		delay(300);
 	} while (jsi.ping(id) != DYN_STATUS_OK);
 
-*/
-	//Serial.println("ESP-JS-AR started");
+
 	LOG(LL_INFO, ("ESP-JS-AR started"));
-/*
+
 	uint8_t dummy;
 	for (uint8_t i = 0; i < 229; i++) {
 		jsi.get8(i, &dummy);
@@ -143,7 +152,7 @@ int JsAr::begin(bool isEnableAllPins)
 	}
 	
 	delay(100);
-*/
+
 	return 0;
 }
 
@@ -451,10 +460,23 @@ DynamixelStatus JsAr::unlockExpander()
 
 DynamixelStatus JsAr::unlockBootloader()
 {	
-	return jsi.write(BOOT_ID, DXL_LOCK_RESET_REG, (uint8_t)0);
+	uint16_t timeout = 500; 
+
+	/* We must sent 10 times for unlock */
+	do {
+		delay(1);
+	} while (jsi.write(BOOT_ID, DXL_LOCK_RESET_REG, (uint8_t)0) != DYN_STATUS_OK  
+			&& --timeout);
+
+	if (timeout != 0) { 
+		return DYN_STATUS_OK;
+	} else { 
+		LOG(LL_INFO, ("unlockBootloader FASLE!")); 
+		return DYN_STATUS_TIMEOUT;
+	}
+
+	return 1;
 }
-
-
 
 // void JsAr::pinMode(uint8_t pin, uint8_t mode)
 // {

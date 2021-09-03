@@ -12,7 +12,8 @@
  
 /* Create Dynamixel device */ 
 DynamixelDevice * rgb = NULL;
-
+DynamixelDevice * stm8_boot = NULL;
+DynamixelDevice * stm8_main = NULL;
 
 static void dxl_task1(void *arg) 
 {
@@ -67,11 +68,14 @@ enum mgos_app_init_result mgos_app_init(void)
   mgos_gpio_set_mode(LED_PIN, MGOS_GPIO_MODE_OUTPUT);
 
   if ( mgos_jsar_begin() == 0) LOG(LL_INFO, ("JSAR_INIT Complete"));
-
+  else LOG(LL_INFO, ("JSAR_INIT FALSE"));
 
   rgb = mgos_dxl_module_create(MODULE_ID);
+  
   mgos_dxl_master_begin(57600);
   mgos_dxl_init(rgb);
+
+  mgos_msleep(500);
 
   mgos_dxl_setUserUartCb(user_cb, NULL);
 
