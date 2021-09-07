@@ -150,11 +150,35 @@ uint16_t JsArKeys::speedRead(uint8_t key_n)
 	return data;		
 }
 
-void JsArKeys::digitalWriteAll(uint8_t val1,  uint8_t val2,  uint8_t val3,  uint8_t val4){}
-void JsArKeys::powerWriteAll(uint16_t val1,  uint16_t val2,  uint16_t val3,  uint16_t val4){}
-void JsArKeys::speedWriteAll(uint16_t val1,  uint16_t val2,  uint16_t val3,  uint16_t val4){}
-void JsArKeys::positionReadAll(uint16_t & val1, uint16_t & val2, uint16_t & val3, uint16_t & val4){}
-void JsArKeys::speedReadAll(uint16_t & val1, uint16_t & val2, uint16_t & val3, uint16_t & val4){}
+void JsArKeys::digitalWriteAll(uint8_t val1,  uint8_t val2,  
+							   uint8_t val3,  uint8_t val4)
+{
+	return;
+}
+
+void JsArKeys::powerWriteAll(uint16_t val1,  uint16_t val2,  
+							 uint16_t val3,  uint16_t val4)
+{
+	return;
+}
+
+void JsArKeys::speedWriteAll(uint16_t val1,  uint16_t val2,  
+							 uint16_t val3,  uint16_t val4)
+{
+	return;
+}
+
+void JsArKeys::positionReadAll(uint16_t *val1, uint16_t *val2, 
+							   uint16_t *val3, uint16_t *val4)
+{
+	return;
+}
+
+void JsArKeys::speedReadAll(uint16_t *val1, uint16_t *val2, 
+							uint16_t *val3, uint16_t *val4)
+{
+	return;
+}
 
 
 

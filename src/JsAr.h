@@ -1,14 +1,18 @@
 #ifndef __JS_AR_H
 #define __JS_AR_H
 
-#include "mgos_system.h"
+#include "mgos.h"
 
 #define ESP_JS_AR (1)	
 
 class JsAr
 {
 public:
-    JsAr(){};
+    JsAr()
+    {
+        
+    };
+
 	int  begin(bool isEnableAllPins = true);
 
     void enableEthernet();
@@ -58,13 +62,7 @@ public:
     int  expanderAnalogRead(uint8_t pin);
     void expanderWriteLed(uint8_t is_en);
 
-//    void pinMode(uint8_t pin, uint8_t mode);
-//    void digitalWrite(uint8_t pin, uint8_t value);
-//    void analogWrite(uint8_t pin, uint16_t value, uint16_t range = 0);
-//    void analogWriteFrequency(uint8_t pin, uint16_t value);
     void timMode(uint8_t tim, uint8_t prescaler, uint16_t pulse);
-//	int digitalRead(uint8_t pin);
-//	int analogRead(uint8_t pin);
 
     int updateFirmware();
     void lockExpander(uint8_t packet_n);

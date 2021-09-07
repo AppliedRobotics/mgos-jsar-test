@@ -148,38 +148,38 @@ void JsArMotors::speedWriteAll(int16_t speed1, int16_t speed2)
 	jsi.set(GOAL_SPEED_1, idx, data);
 }
 
-void JsArMotors::positionReadAll(int16_t &position1, int16_t &position2)
+void JsArMotors::positionReadAll(int16_t *position1, int16_t *position2)
 {
 	uint8_t data[6];
 	jsi.get(PRESENT_POSITION_1, sizeof(data), data);
-	position1 = data[0] | ((uint16_t)data[1] << 8);
-	position2 = data[4] | ((uint16_t)data[5] << 8);
+	*position1 = data[0] | ((uint16_t)data[1] << 8);
+	*position2 = data[4] | ((uint16_t)data[5] << 8);
 }
 
-void JsArMotors::speedReadAll(int16_t &speed1, int16_t &speed2)
+void JsArMotors::speedReadAll(int16_t *speed1, int16_t *speed2)
 {
 	uint8_t data[4];
 	jsi.get(PRESENT_SPEED_1, sizeof(data), data);
-	speed1 = data[0] | ((uint16_t)data[1] << 8);
-	speed2 = data[2] | ((uint16_t)data[3] << 8);
+	*speed1 = data[0] | ((uint16_t)data[1] << 8);
+	*speed2 = data[2] | ((uint16_t)data[3] << 8);
 }
 
-void JsArMotors::readAll(int16_t &position1, int16_t &speed1, int16_t &position2, int16_t &speed2)
+void JsArMotors::readAll(int16_t *position1, int16_t *speed1, int16_t *position2, int16_t *speed2)
 {
 	uint8_t data[14];
 	jsi.get(PRESENT_POSITION_1, sizeof(data), data);
-	position1 = data[0] | ((uint16_t)data[1] << 8);
-	position2 = data[4] | ((uint16_t)data[5] << 8);
-	speed1 = data[8] | ((uint16_t)data[9] << 8);
-	speed2 = data[12] | ((uint16_t)data[13] << 8);
+	*position1 = data[0] | ((uint16_t)data[1] << 8);
+	*position2 = data[4] | ((uint16_t)data[5] << 8);
+	*speed1 = data[8] | ((uint16_t)data[9] << 8);
+	*speed2 = data[12] | ((uint16_t)data[13] << 8);
 }
 
-void JsArMotors::powerReadAll(int16_t &power1, int16_t &power2)
+void JsArMotors::powerReadAll(int16_t *power1, int16_t *power2)
 {
 	uint8_t data[6];
 	jsi.get(POWER_1, sizeof(data), data);
-	power1 = data[0] | ((uint16_t)data[1] << 8);
-	power2 = data[4] | ((uint16_t)data[5] << 8);
+	*power1 = data[0] | ((uint16_t)data[1] << 8);
+	*power2 = data[4] | ((uint16_t)data[5] << 8);
 }
 
 

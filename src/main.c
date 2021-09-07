@@ -9,11 +9,11 @@
 #define RGB_BLUE  (28)
 #define MODULE_ID (0x15)
 
+uint8_t led_state = 0;
  
 /* Create Dynamixel device */ 
 DynamixelDevice * rgb = NULL;
-DynamixelDevice * stm8_boot = NULL;
-DynamixelDevice * stm8_main = NULL;
+
 
 static void dxl_task1(void *arg) 
 {
@@ -29,16 +29,9 @@ static void dxl_task1(void *arg)
 
   LOG(LL_INFO, ("LED: %d:%d:%d", r, g, b));
 
-  if (r) {  
-    r = 0; 
-    b = 2;
-  } else if (b) { 
-    b = 0; 
-    g = 2;
-  } else { 
-    b = 0; 
-    r = 2; 
-    g = 0; 
+  if (r) {        r = 0; b = 2;
+  } else if (b) { b = 0; g = 2;
+  } else {        b = 0; r = 2; g = 0; 
   }
 
   mgos_dxl_write(rgb, RGB_RED, r);
@@ -51,6 +44,8 @@ static void dxl_task1(void *arg)
 
 static void led_task(void *arg)
 {
+  mgos_jsar_expanderWriteLed(led_state++ & 1);
+
   mgos_gpio_toggle(LED_PIN);
   (void) arg;
 }
@@ -67,9 +62,6 @@ enum mgos_app_init_result mgos_app_init(void)
 {
   mgos_gpio_set_mode(LED_PIN, MGOS_GPIO_MODE_OUTPUT);
 
-  if ( mgos_jsar_begin() == 0) LOG(LL_INFO, ("JSAR_INIT Complete"));
-  else LOG(LL_INFO, ("JSAR_INIT FALSE"));
-
   rgb = mgos_dxl_module_create(MODULE_ID);
   
   mgos_dxl_master_begin(57600);
@@ -79,8 +71,12 @@ enum mgos_app_init_result mgos_app_init(void)
 
   mgos_dxl_setUserUartCb(user_cb, NULL);
 
+  if( mgos_jsar_begin() == 0) LOG(LL_INFO, ("JSAR_INIT Complete"));
+  else LOG(LL_INFO, ("JSAR_INIT FALSE"));
+
   mgos_set_timer(500 , MGOS_TIMER_REPEAT, dxl_task1, NULL);
   mgos_set_timer(333 , MGOS_TIMER_REPEAT, led_task, NULL);
+  
 
   return MGOS_APP_INIT_SUCCESS;
 }
